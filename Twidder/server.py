@@ -46,7 +46,7 @@ def echo_socket(ws):
         print "ws: ", ws
         token = ws.receive()
         print "token:", token
-        email = database_helper.get_email_by_token(token) #FEL
+        email = database_helper.get_email_by_token(token) #------------------------------------
         print "email:", email
         socket_connections[email[0]]= ws
 
@@ -203,19 +203,21 @@ def post_message():
 
 
 #is not used right now
-@app.route("/profilepicture", methods = ['POST'])
-def profile_picture():
+@app.route("/profilepicture/<token>/<email>", methods = ['POST'])
+def profile_picture(token, email):
     print "PROFILE PICTURE"
     picture = request.files['file']
-    token = request.form['token']
-    email = request.form['email']
-    picturename = token + "___" + email
-    picture.save("static/" + picturename + ".png")
+    #token = request.form['token']
+    #email = request.form['email']
+    print "PROF1"
+    picturename = token + "___" + email + ".png"
+    print "PROF2"
+    picture.save("static/" + picturename)
 
     result = database_helper.post_profilepic(email, picturename)
 
     if result == True:
-        return jsonify({"success": True, "message": 'Picture saved', "data": picture})
+        return jsonify({"success": True, "message": 'Picture saved'})
     else:
         return jsonify({"success": False, "message": 'Picture not posted'})
 

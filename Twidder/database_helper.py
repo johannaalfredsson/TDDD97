@@ -121,7 +121,7 @@ def change_psw(token, oldPassword, newPassword):
     else:
         return False
 
-def get_email_by_token(token):
+def get_email_by_token(token): #------------------------------------------------------------
     print ("token_db:", token)
     cursor = g.db.execute("select email from user_token where token=?", [token])
     print ("cursor:", cursor)

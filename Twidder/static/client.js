@@ -223,7 +223,7 @@ function showProfile() //FUNKAR
          document.getElementById("user_city").innerHTML = data.city;
          document.getElementById("user_country").innerHTML = data.country;
          document.getElementById("user_email").innerHTML = data.email;
-         document.getElementById("pic").src = data.picture}
+         document.getElementById("pic").src = data.picture + '?' + Math.random()}
        }
        xhttp.send();
 
@@ -373,20 +373,26 @@ function searchUser() //FUNKAR
 
 function upload_profilepicture()
 {
+  var picture = document.getElementById("post_pic").files[0]; // .files[0]
+  //console.log('picture:', picture);
+  //var src = picture.toDataURL("image/png");
+  //console.log("src:", src)
 
-  var picture = document.getElementById("post_pic").files[0];
+
+
   var formData = new FormData();
   var token = localStorage.getItem("token");
   console.log('picture', picture, 'token_js', token);
   var email = document.getElementById("user_email").innerHTML;
-  formData.append('token', token);
-  formData.append("email", email);
-  formData.append("file", picture);
-  for(var entry of formData.entries())
-  console.log('formDAta', entry);
-
+  //formData.append('token', token);
+  //formData.append('email', email);
+  formData.append('file', picture);
+  console.log('hej1', formData);
+  for(var entry of formData.entries()) {
+  console.log(entry[0]+ ',' + entry[1]);
+  }
   var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "/profilepicture", true);
+  xhttp.open("POST", "/profilepicture/"+ token + "/" + email, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.onload = function(){
 
@@ -397,11 +403,12 @@ function upload_profilepicture()
 
       if(success)
       {
-        showmyWall();
+        showProfile();
       }
 
     }
-    xhttp.send(formData);
+    console.log('entry2', entry)
+    xhttp.send(entry);
 }
 
 function upload_media()

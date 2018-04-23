@@ -70,12 +70,12 @@ background-color: LightSkyBlue;
     <div id="Home" class="tabcontent">
 
     <div class= "float">
-      <form method="post" id="profile_image" onsubmit = "upload_profilepicture();">
+      <form method="post" id="profile_image" onsubmit = "upload_profilepicture(); return false;">
       <input id="post_pic" type="file" accept="image/*">
       <input type="submit" value= "Upload">
        </form>
 
-    <img class = picture id = "pic" src = "" />
+    <img class = "picture" id = "pic" src = "" />
 
     </div>
 
@@ -131,7 +131,7 @@ background-color: LightSkyBlue;
         <p id= message_browse> </p>
         <div class= "inner" id="browse_hide">
 
-        <img class = picture_browse id = "pic_browse" src = "" />
+        <img class = "picture_browse" id = "pic_browse" src = "" />
 
         <div id = "information_browse"> <h3>Users information</h3>
 
