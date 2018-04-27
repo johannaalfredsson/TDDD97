@@ -46,7 +46,7 @@ def echo_socket(ws):
         print "ws: ", ws
         token = ws.receive()
         print "token:", token
-        email = database_helper.get_email_by_token(token) #------------------------------------
+        email = database_helper.get_email_by_token(token) #-----------------------------
         print "email:", email
         socket_connections[email[0]]= ws
 
@@ -130,10 +130,7 @@ def sign_out():
 def change_password():
     token = request.json['token']
     oldPassword = request.json['oldPassword']
-    newPassword = request.json['newPassword']
-    result = database_helper.change_psw(token, oldPassword, newPassword)
-
-    if (len(newPassword)<6):
+    newPassword = request.json['newPassword']To decode an image using Python, we sim
         return jsonify({"success": False, "message": 'Password needs to be at least 6 characters long'})
 
     elif result == True:
@@ -206,13 +203,15 @@ def post_message():
 @app.route("/profilepicture/<token>/<email>", methods = ['POST'])
 def profile_picture(token, email):
     print "PROFILE PICTURE"
-    picture = request.files['file']
+    picture = request.files['dataURL']
+    print "popopop"
+    pic_string = base64.b64encode(picture.read())
     #token = request.form['token']
     #email = request.form['email']
     print "PROF1"
     picturename = token + "___" + email + ".png"
     print "PROF2"
-    picture.save("static/" + picturename)
+    picture_string.save("static/" + picturename)
 
     result = database_helper.post_profilepic(email, picturename)
 

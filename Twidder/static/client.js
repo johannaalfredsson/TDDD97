@@ -369,46 +369,62 @@ function searchUser() //FUNKAR
    xhttp.send();
 }
 
+var preview= function(event){
+  var input = event.target;
+
+  var reader = new FileReader();
+  reader.onload = function() {
+  var dataURL = reader.result;
+  var output =document.getElementById('pic');
+  output.src = dataURL;
+  console.log('dataURL', dataURL)
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+
 
 
 function upload_profilepicture()
 {
-  var picture = document.getElementById("post_pic").files[0]; // .files[0]
+  //var picture = document.getElementById("post_pic").files[0];
   //console.log('picture:', picture);
   //var src = picture.toDataURL("image/png");
   //console.log("src:", src)
 
+  var dataURL = document.getElementById('pic').src;
+  console.log('dataURL2', dataURL)
 
 
-  var formData = new FormData();
+
+  //var formData = new FormData();
   var token = localStorage.getItem("token");
-  console.log('picture', picture, 'token_js', token);
+  //console.log('picture', picture, 'token_js', token);
   var email = document.getElementById("user_email").innerHTML;
   //formData.append('token', token);
   //formData.append('email', email);
-  formData.append('file', picture);
-  console.log('hej1', formData);
-  for(var entry of formData.entries()) {
-  console.log(entry[0]+ ',' + entry[1]);
-  }
+  //formData.append('file', picture);
+  //console.log('hej1', formData);
+  //for(var entry of formData.entries()) {
+  //console.log(entry[0]+ ',' + entry[1]);
+  //}
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", "/profilepicture/"+ token + "/" + email, true);
   xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.onload = function(){
-
+      console.log('hehe')
       var parsedJson = JSON.parse(xhttp.responseText);
       var message = parsedJson.message;
       var success = parsedJson.success;
       var data = parsedJson.data;
-
+      console.log("daaataaa", data)
       if(success)
       {
         showProfile();
       }
 
     }
-    console.log('entry2', entry)
-    xhttp.send(entry);
+    xhttp.send(dataURL);
 }
 
 function upload_media()

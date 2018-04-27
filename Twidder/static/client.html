@@ -71,7 +71,7 @@ background-color: LightSkyBlue;
 
     <div class= "float">
       <form method="post" id="profile_image" onsubmit = "upload_profilepicture(); return false;">
-      <input id="post_pic" type="file" accept="image/*">
+      <input id="post_pic" type="file" accept="image/*" onchange = 'preview(event)'>
       <input type="submit" value= "Upload">
        </form>
 
