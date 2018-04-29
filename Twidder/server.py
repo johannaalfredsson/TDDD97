@@ -62,7 +62,7 @@ def sign_up():
         gender = request.json['gender']
         city = request.json['city']
         country = request.json['country']
-        picture = "/static/profile.png"
+        picture = "profile.png"
 
 
         if (email == None or password == None or firstname == None or familyname == None or gender== None or city== None or country == None):
@@ -130,7 +130,10 @@ def sign_out():
 def change_password():
     token = request.json['token']
     oldPassword = request.json['oldPassword']
-    newPassword = request.json['newPassword']To decode an image using Python, we sim
+    newPassword = request.json['newPassword']
+    result = database_helper.change_psw(token, oldPassword, newPassword)
+
+    if (len(newPassword)<6):
         return jsonify({"success": False, "message": 'Password needs to be at least 6 characters long'})
 
     elif result == True:
@@ -199,19 +202,11 @@ def post_message():
         return jsonify({"success": False, "message": 'Message not sent'})
 
 
-#is not used right now
 @app.route("/profilepicture/<token>/<email>", methods = ['POST'])
 def profile_picture(token, email):
-    print "PROFILE PICTURE"
-    picture = request.files['dataURL']
-    print "popopop"
-    pic_string = base64.b64encode(picture.read())
-    #token = request.form['token']
-    #email = request.form['email']
-    print "PROF1"
-    picturename = token + "___" + email + ".png"
-    print "PROF2"
-    picture_string.save("static/" + picturename)
+    picture = request.files['file']
+    picturename = token + "___" + email + "____" + picture.filename
+    picture.save("static/" + picturename)
 
     result = database_helper.post_profilepic(email, picturename)
 
@@ -219,6 +214,8 @@ def profile_picture(token, email):
         return jsonify({"success": True, "message": 'Picture saved'})
     else:
         return jsonify({"success": False, "message": 'Picture not posted'})
+
+
 
 
 

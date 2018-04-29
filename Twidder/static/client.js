@@ -223,7 +223,7 @@ function showProfile() //FUNKAR
          document.getElementById("user_city").innerHTML = data.city;
          document.getElementById("user_country").innerHTML = data.country;
          document.getElementById("user_email").innerHTML = data.email;
-         document.getElementById("pic").src = data.picture + '?' + Math.random()}
+         document.getElementById("pic").src = "static/" + data.picture}
        }
        xhttp.send();
 
@@ -356,7 +356,7 @@ function searchUser() //FUNKAR
             document.getElementById("friend_country").innerHTML = data.country;
             document.getElementById("friend_email").innerHTML = data.email;
             document.getElementById("message_browse").innerHTML = message;
-            document.getElementById("pic_browse").src = data.picture;
+            document.getElementById("pic_browse").src = "static/" + data.picture;
             document.getElementById("browse_hide").style.display = "block";
             showUsersWall();
         }
@@ -387,45 +387,35 @@ var preview= function(event){
 
 function upload_profilepicture()
 {
-  //var picture = document.getElementById("post_pic").files[0];
-  //console.log('picture:', picture);
-  //var src = picture.toDataURL("image/png");
-  //console.log("src:", src)
+      var token = localStorage.getItem("token");
+      var email = document.getElementById("user_email").innerHTML;
 
-  var dataURL = document.getElementById('pic').src;
-  console.log('dataURL2', dataURL)
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/profilepicture/"+ token + "/" + email, true);
 
-
-
-  //var formData = new FormData();
-  var token = localStorage.getItem("token");
-  //console.log('picture', picture, 'token_js', token);
-  var email = document.getElementById("user_email").innerHTML;
-  //formData.append('token', token);
-  //formData.append('email', email);
-  //formData.append('file', picture);
-  //console.log('hej1', formData);
-  //for(var entry of formData.entries()) {
-  //console.log(entry[0]+ ',' + entry[1]);
-  //}
-  var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "/profilepicture/"+ token + "/" + email, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
-  xhttp.onload = function(){
-      console.log('hehe')
-      var parsedJson = JSON.parse(xhttp.responseText);
-      var message = parsedJson.message;
-      var success = parsedJson.success;
-      var data = parsedJson.data;
-      console.log("daaataaa", data)
-      if(success)
-      {
-        showProfile();
+      xhttp.onload = function(){
+          console.log(xhttp.responseText);
+          var parsedJson = JSON.parse(xhttp.responseText);
+          var message = parsedJson.message;
+          var success = parsedJson.success;
+          var data = parsedJson.data;
+          if(success)
+          {
+              showProfile();
+          }
       }
 
-    }
-    xhttp.send(dataURL);
+      var formData = new FormData();
+      var picture = document.getElementById("post_pic").files[0];
+      formData.append('file', picture);
+
+      for(var entry of formData.entries()) {
+          console.log("formdata", entry);
+      }
+
+      xhttp.send(formData);
 }
+
 
 function upload_media()
 {
