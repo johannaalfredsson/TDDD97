@@ -133,6 +133,7 @@ function homeTab(evt, name) {
     evt.currentTarget.className += " active";
     showProfile();
     showmyWall();
+    showmymediaWall();
 }
 
 
@@ -300,11 +301,50 @@ function showmyWall() //FUNKAR
               var row = "<div class='row'>"
               row  = row + data[i].writer + ":" + data[i].content;
               document.getElementById("wall").innerHTML += row;
+
+
           }
         }
       }
    xhttp.send();
 }
+
+
+function showmymediaWall() //FUNKAR
+{
+    var token = localStorage.getItem("token");
+    var payload = {"token": token}
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "/getusermediabytoken/" + token, true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onload = function() {
+        var parsedJson = JSON.parse(xhttp.responseText)
+        var message = parsedJson.message;
+        var success = parsedJson.success;
+        var data = parsedJson.data;
+        console.log("data:", data)
+
+
+        if (success) {
+          document.getElementById("media_wall").innerHTML = " ";
+          for(var i= 0; i<data.length; i++){
+              var row = "<div class='row'>"
+              row  = row + data[i].writer + ":" + data[i].media;
+              document.getElementById("media_wall").innerHTML += row;
+
+          }
+        }
+      }
+   xhttp.send();
+}
+
+
+
+
+
+
+
+
 
 function showUsersWall() //FUNKAR
 {
@@ -382,6 +422,19 @@ var preview= function(event){
   reader.readAsDataURL(input.files[0]);
 }
 
+var preview_media= function(event){
+  var input = event.target;
+
+  var reader = new FileReader();
+  reader.onload = function() {
+  var dataURL = reader.result;
+  var output =document.getElementById('media');
+  output.src = dataURL;
+  console.log('dataURL', dataURL)
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
 
 
 
@@ -391,7 +444,7 @@ function upload_profilepicture()
       var email = document.getElementById("user_email").innerHTML;
 
       var xhttp = new XMLHttpRequest();
-      xhttp.open("POST", "/profilepicture/"+ token + "/" + email, true);
+      xhttp.open("POST", "/saveprofilepic/"+ token + "/" + email, true);
 
       xhttp.onload = function(){
           console.log(xhttp.responseText);
@@ -419,35 +472,33 @@ function upload_profilepicture()
 
 function upload_media()
 {
-
-  var picture = document.getElementById("post_media").files[0];
-  var formData = new FormData();
   var token = localStorage.getItem("token");
-  console.log('picture', picture, 'token_js', token);
   var email = document.getElementById("user_email").innerHTML;
-  formData.append('token', token);
-  formData.append("email", email);
-  formData.append("file", picture);
-  for(var entry of formData.entries())
-  console.log('formDAta', entry);
 
   var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "/addmedia", true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
-  xhttp.onload = function(){
+  xhttp.open("POST", "/savemedia/"+ token + "/" + email, true);
 
+  xhttp.onload = function(){
+      console.log(xhttp.responseText);
       var parsedJson = JSON.parse(xhttp.responseText);
       var message = parsedJson.message;
       var success = parsedJson.success;
       var data = parsedJson.data;
-
       if(success)
       {
-        showmyWall();
+          showmymediaWall();
       }
+  }
 
-    }
-    xhttp.send(formData);
+  var formData = new FormData();
+  var media = document.getElementById("post_media").files[0];
+  formData.append('file', media);
+
+  for(var entry of formData.entries()) {
+      console.log("formdata", entry);
+  }
+
+  xhttp.send(formData);
 }
 
 

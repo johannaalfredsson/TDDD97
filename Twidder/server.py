@@ -46,7 +46,7 @@ def echo_socket(ws):
         print "ws: ", ws
         token = ws.receive()
         print "token:", token
-        email = database_helper.get_email_by_token(token) #-----------------------------
+        email = database_helper.get_email_by_token(token)
         print "email:", email
         socket_connections[email[0]]= ws
 
@@ -177,6 +177,16 @@ def get_user_messages_by_token(token):
         return jsonify({"success": False, "message": 'Could not return your message'})
 
 
+@app.route("/getusermediabytoken/<token>", methods = ['GET'])
+def get_user_media_by_token(token):
+
+    try:
+        result = database_helper.get_media_by_token(token)
+        return jsonify({"success": True, "message": 'Message returned', "data": result})
+    except:
+        return jsonify({"success": False, "message": 'Could not return your message'})
+
+
 
 @app.route("/getusermessagesbyemail/<token>/<email_friend>", methods = ['GET'])
 def get_user_messages_by_email(token, email_friend):
@@ -202,8 +212,8 @@ def post_message():
         return jsonify({"success": False, "message": 'Message not sent'})
 
 
-@app.route("/profilepicture/<token>/<email>", methods = ['POST'])
-def profile_picture(token, email):
+@app.route("/saveprofilepic/<token>/<email>", methods = ['POST'])
+def save_profilepic(token, email):
     picture = request.files['file']
     picturename = token + "___" + email + "____" + picture.filename
     picture.save("static/" + picturename)
@@ -215,7 +225,21 @@ def profile_picture(token, email):
     else:
         return jsonify({"success": False, "message": 'Picture not posted'})
 
+@app.route("/savemedia/<token>/<email>", methods = ['POST'])
+def save_media(token, email):
+    print("save_media1")
+    media = request.files['file']
+    print(media)
+    medianame = token + "___" + email + "____" + media.filename
+    media.save("static/" + medianame)
+    print("media", media, "token", token, "email", email)
 
+    result = database_helper.post_media(email, medianame)
+
+    if result == True:
+        return jsonify({"success": True, "message": 'Picture saved'})
+    else:
+        return jsonify({"success": False, "message": 'Picture not posted'})
 
 
 

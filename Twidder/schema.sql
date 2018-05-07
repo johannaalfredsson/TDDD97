@@ -8,3 +8,5 @@ create table user_token(email text, token text, foreign key(email) references us
 create table messages(sender text, email text, content text);
 
 create table profile_pic(email text, picture text);
+
+create table media_messages(sender text, email text, media text);

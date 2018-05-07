@@ -72,7 +72,7 @@ background-color: LightSkyBlue;
     <div class= "float">
       <form method="post" id="profile_image" onsubmit = "upload_profilepicture(); return false;">
       <input id="post_pic" type="file" accept="image/*" onchange = 'preview(event)'>
-      <input type="submit" value= "Upload">
+      <input type = "submit" value = "Upload">
        </form>
 
     <img class = "picture" id = "pic" src = "" />
@@ -103,17 +103,25 @@ background-color: LightSkyBlue;
             </form>
          </div>
 
-         <img class = media id = "media" src = "static/add.png" draggable = "true" ondragstart = "drag(event)"/>
+
 
          <div class= "float">
-           <form method="post" id="media_image" onsubmit = "upload_media();">
-           <input id="post_media" type="file" accept="image/*">
-           <input id = "upload_media" type="submit" value= "Upload">
+           <form method="post" id="media_image" onsubmit = "upload_media(); return false;">
+           <input id="post_media" type="file" accept="image/*" onchange = 'preview_media(event)'>
+           <input type = "submit" value = "Upload">
             </form>
         </div>
 
+        <img class = media id = "media" src = "static/add.png" draggable = "true" ondragstart = "drag(event)"/>
+
+
+
          <div class = "float">
             <div id = "wall" style="border:1px solid" ondrop = "drop(event)" ondragover = "allowDrop(event)" > </div>
+         </div>
+
+         <div class = "float">
+            <div id = "media_wall" style="border:1px solid" ondrop = "drop(event)" ondragover = "allowDrop(event)" > </div>
          </div>
     </div>
 

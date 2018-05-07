@@ -215,6 +215,25 @@ def get_messages_by_token(token):
         return False
 
 
+
+
+def get_media_by_token(token):
+    try:
+        cursor = g.db.execute("select sender, media from media_messages, user_token where user_token.token = ? and media_messages.email = user_token.email", [token])
+        rows = cursor.fetchall()
+        cursor.close()
+
+        result = []
+        for row in rows:
+            result.append({ "writer": row[0], "media": row[1] })
+
+        return result
+
+    except:
+        return False
+
+
+
 def get_messages_by_email(token, email_friend):
     try:
         cursor = g.db.execute("select * from user_token where token = ?", [token])
@@ -261,6 +280,16 @@ def post_profilepic(email, picture):
     g.db.commit()
 
     cur = g.db.execute("insert into profile_pic values(?,?)", [email, picture])
+    g.db.commit()
+
+    return True
+
+
+def post_media(email, media):
+
+    print("database_helper1")
+
+    cur = g.db.execute("insert into media_messages values(?,?,?)", [email, email, media])
     g.db.commit()
 
     return True
