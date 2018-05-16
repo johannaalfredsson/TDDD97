@@ -77,6 +77,8 @@ background-color: LightSkyBlue;
 
     <img class = "picture" id = "pic" src = "" />
 
+
+
     </div>
 
         <div id = "information"> <h3>Users information</h3>
@@ -107,12 +109,16 @@ background-color: LightSkyBlue;
 
          <div class= "float">
            <form method="post" id="media_image" onsubmit = "upload_media(); return false;">
-           <input id="post_media" type="file" accept="image/*" onchange = 'preview_media(event)'>
+           <input id="post_media" type="file" accept="image/*, video/*, audio/*" onchange = 'preview_media(event)'>
            <input type = "submit" value = "Upload">
             </form>
         </div>
 
-        <img class = media id = "media" src = "static/add.png" draggable = "true" ondragstart = "drag(event)"/>
+        <div>
+          <video class = media id = "media" controls>
+            <source src = "static/mov_bbb.ogg" type="video/ogg">
+          </video>
+        </div>
 
 
 
@@ -121,7 +127,8 @@ background-color: LightSkyBlue;
          </div>
 
          <div class = "float">
-            <div id = "media_wall" style="border:1px solid" ondrop = "drop(event)" ondragover = "allowDrop(event)" > </div>
+            <div id = "media_wall" style="border:1px solid">
+            </div>
          </div>
     </div>
 
@@ -162,18 +169,29 @@ background-color: LightSkyBlue;
             </form>
          </div>
 
-         <img class = media_browse id = "media" src = "static/add.png" />
+
 
          <div class= "float">
-           <form method="post" id="media_image_browse" onsubmit = "upload_media_browse();">
+           <form method="post" id="media_image_browse" onsubmit = "upload_media_browse(); return false;">
            <input id="post_media_browse" type="file" accept="image/*">
-           <input id = "upload_media_browse" type="submit" value= "Upload">
+           <input type="submit" value= "Upload">
             </form>
         </div>
+
+        <img class = media_browse id = "media" src = "static/add.png" />
 
          <div class= "float">
             <div id="browse_wall" style="border:1px solid" ondrop = "drop_friend(event)" ondragover = "allowDrop(event)"> </div>
          </div>
+
+         <div class = "float">
+            <div id = "media_browse_wall" style="border:1px solid">
+            </div>
+         </div>
+    </div>
+
+
+
 
        </div>
 

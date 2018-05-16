@@ -234,6 +234,23 @@ def get_media_by_token(token):
 
 
 
+def get_media_by_email(token, email_friend):
+    try:
+        cursor = g.db.execute("select * from user_token where token = ?", [token])
+        cursor.close()
+        cur = g.db.execute("select sender, media from media_messages where email = ? ", [email_friend])
+
+        row = cur.fetchall()
+        cur.close()
+        result = []
+        for rows in row:
+            result.append({ "writer": rows[0], "content": rows[1] })
+        return result
+
+    except:
+        return False
+
+
 def get_messages_by_email(token, email_friend):
     try:
         cursor = g.db.execute("select * from user_token where token = ?", [token])
@@ -293,3 +310,26 @@ def post_media(email, media):
     g.db.commit()
 
     return True
+
+
+def post_media_browse(token, email, media):
+    try:
+
+        sender = []
+
+        cur = g.db.execute("select email from user_token where token = ?", [token])
+        row = cur.fetchone()
+        cur.close()
+
+
+        sender = row[0]
+
+        cur = g.db.execute("insert into media_messages values(?,?,?)", [sender, email, media])
+
+        g.db.commit()
+        return True
+
+    except Exception as e:
+        print e
+
+        return False

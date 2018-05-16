@@ -309,7 +309,6 @@ function showmyWall() //FUNKAR
    xhttp.send();
 }
 
-
 function showmymediaWall() //FUNKAR
 {
     var token = localStorage.getItem("token");
@@ -322,28 +321,31 @@ function showmymediaWall() //FUNKAR
         var message = parsedJson.message;
         var success = parsedJson.success;
         var data = parsedJson.data;
-        console.log("data:", data)
-
+        document.getElementById("media_wall").innerHTML = " ";
 
         if (success) {
-          document.getElementById("media_wall").innerHTML = " ";
           for(var i= 0; i<data.length; i++){
-              var row = "<div class='row'>"
-              row  = row + data[i].writer + ":" + data[i].media;
-              document.getElementById("media_wall").innerHTML += row;
 
-          }
+            let row = document.createElement("DIV");
+            console.log("row", row);
+            let img = document.createElement("IMG"); //VIDEO
+            console.log("img", img)
+
+            img.src = "static/" + data[i].media;
+            row.appendChild(img);
+            document.getElementById("media_wall").appendChild(row);
+            console.log("klar")
         }
-      }
+              //document.getElementById("media_wall").innerHTML =
+
+                //  "<video class = media controls>"
+                  //"<source src = static/mov_bbb.ogg type=video/ogg>"
+                  //"</video>"
+
+        }
+      };
    xhttp.send();
 }
-
-
-
-
-
-
-
 
 
 function showUsersWall() //FUNKAR
@@ -358,7 +360,6 @@ function showUsersWall() //FUNKAR
         var message = parsedJson.message;
         var success = parsedJson.success;
         var data = parsedJson.data;
-        console.log(data);
 
         if (success) {
           document.getElementById("browse_wall").innerHTML = " ";
@@ -372,6 +373,41 @@ function showUsersWall() //FUNKAR
    xhttp.send();
 
 }
+function showUsermediaWall() //FUNKAR
+{
+    var token = localStorage.getItem("token");
+    var email_friend = document.getElementById("friend").value;
+    console.log("email", email_friend);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "/getusermediabyemail/" + token + "/" + email_friend, true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onload = function() {
+        var parsedJson = JSON.parse(xhttp.responseText)
+        var message = parsedJson.message;
+        var success = parsedJson.success;
+        var data = parsedJson.data;
+        document.getElementById("media_browse_wall").innerHTML = "";
+        console.log("data", data)
+        console.log("SUCCESSSSSS:", success)
+
+        if (success) {
+
+          for(var i= 0; i<data.length; i++){
+
+              let row = document.createElement("DIV");
+              console.log("row", row);
+              let img = document.createElement("IMG");
+              img.src = "static/" + data[i].content;
+              console.log("HERE", img.src)
+              row.appendChild(img);
+              document.getElementById("media_browse_wall").appendChild(row);
+              console.log("klar")
+          }
+        }
+      };
+   xhttp.send();
+}
+
 
 function searchUser() //FUNKAR
 {
@@ -399,6 +435,7 @@ function searchUser() //FUNKAR
             document.getElementById("pic_browse").src = "static/" + data.picture;
             document.getElementById("browse_hide").style.display = "block";
             showUsersWall();
+            showUsermediaWall();
         }
         else {
             document.getElementById("message_browse").innerHTML = message;
@@ -434,8 +471,6 @@ var preview_media= function(event){
   };
   reader.readAsDataURL(input.files[0]);
 }
-
-
 
 
 function upload_profilepicture()
@@ -501,6 +536,36 @@ function upload_media()
   xhttp.send(formData);
 }
 
+function upload_media_browse()
+{
+  var token = localStorage.getItem("token");
+  var email = document.getElementById("friend_email").innerHTML;
+  console.log("email2", email);
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "/savemediabrowse/"+ token + "/" + email, true);
+
+  xhttp.onload = function(){
+      console.log(xhttp.responseText);
+      var parsedJson = JSON.parse(xhttp.responseText);
+      var message = parsedJson.message;
+      var success = parsedJson.success;
+      var data = parsedJson.data;
+      if(success)
+      {
+          showUsermediaWall();
+      }
+  }
+
+  var formData = new FormData();
+  var media = document.getElementById("post_media_browse").files[0];
+  formData.append('file', media);
+
+  for(var entry of formData.entries()) {
+      console.log("formdata", entry);
+  }
+
+  xhttp.send(formData);
+}
 
   //DRAG AND DROP
   function allowDrop(event) {

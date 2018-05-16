@@ -187,6 +187,15 @@ def get_user_media_by_token(token):
         return jsonify({"success": False, "message": 'Could not return your message'})
 
 
+@app.route("/getusermediabyemail/<token>/<email_friend>", methods = ['GET'])
+def get_user_media_by_email(token, email_friend):
+
+    try:
+        result = database_helper.get_media_by_email(token, email_friend)
+        print("RESULTTTTT", result)
+        return jsonify({"success": True, "message": 'Message returned', "data": result})
+    except:
+        return jsonify({"success": False, "message": 'Could not return your message'})
 
 @app.route("/getusermessagesbyemail/<token>/<email_friend>", methods = ['GET'])
 def get_user_messages_by_email(token, email_friend):
@@ -227,9 +236,9 @@ def save_profilepic(token, email):
 
 @app.route("/savemedia/<token>/<email>", methods = ['POST'])
 def save_media(token, email):
-    print("save_media1")
+
     media = request.files['file']
-    print(media)
+
     medianame = token + "___" + email + "____" + media.filename
     media.save("static/" + medianame)
     print("media", media, "token", token, "email", email)
@@ -240,6 +249,23 @@ def save_media(token, email):
         return jsonify({"success": True, "message": 'Picture saved'})
     else:
         return jsonify({"success": False, "message": 'Picture not posted'})
+
+
+@app.route("/savemediabrowse/<token>/<email>", methods = ['POST'])
+def save_media_browse(token, email):
+
+    media = request.files['file']
+
+    medianame = token + "___" + email + "____" + media.filename
+    media.save("static/" + medianame)
+    print("media", media, "token", token, "email", email)
+
+    result = database_helper.post_media_browse(token, email, medianame)
+
+    if result == True:
+        return jsonify({"success": True, "message": 'Media saved'})
+    else:
+        return jsonify({"success": False, "message": 'Media not posted'})
 
 
 
