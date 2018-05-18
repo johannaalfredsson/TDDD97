@@ -1,5 +1,5 @@
 from flask import app, request
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 import database_helper
 import json
 from random import randint
@@ -20,9 +20,24 @@ socket_connections = {}
 allow_reuse_address = True
 
 
+
 @app.route('/')
 def root():
     return app.send_static_file(filename='client.html')
+
+
+
+#@app.route('/loadmedia/<token>/<filename>', methods=['GET'])
+#def load_media(token, filename):
+#    console.log("here")
+#    result = database_helper.check_token(token)
+#    if result:
+#        app.send_from_directory("Images", filename)
+#        return jsonify({"success": True, "message": 'you are allowed to see the pic'})
+#    else:
+#        return jsonify({"success": False, "message": 'not allowed'})
+
+
 
 @app.before_request
 def before_request():
@@ -32,9 +47,6 @@ def before_request():
 def teardown_request(exception):
     database_helper.close_db()
 
-#@app.route("/", methods=['POST'])
-#def hello():
-#    return request.get_json()['token']
 
 
 @socket.route('/echo')
@@ -78,6 +90,8 @@ def sign_up():
                 return jsonify({"success": True, "message": 'user added'})
             else:
                 return jsonify({"success": False, "message": 'could not add the user'})
+
+
 
 
 

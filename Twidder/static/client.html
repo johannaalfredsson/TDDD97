@@ -69,6 +69,9 @@ background-color: LightSkyBlue;
 
     <div id="Home" class="tabcontent">
 
+    <div id = "Home_container">
+    <div id = "Home_part10">
+    <div id = "Home_part11">
     <div class= "float">
       <form method="post" id="profile_image" onsubmit = "upload_profilepicture(); return false;">
       <input id="post_pic" type="file" accept="image/*" onchange = 'preview(event)'>
@@ -77,10 +80,10 @@ background-color: LightSkyBlue;
 
     <img class = "picture" id = "pic" src = "" />
 
-
-
+    </div>
     </div>
 
+        <div id = "Home_part12">
         <div id = "information"> <h3>Users information</h3>
 
          <div class= "inner">
@@ -94,8 +97,9 @@ background-color: LightSkyBlue;
             </div>
           </div>
          </div>
+         </div>
 
-
+         <div id = "Home_part13">
          <div id = "write_message" class= "float">
             <form id="saveform3" onsubmit= "post_message(); return false;">
                 <textarea id = text_message rows="5" cols="30" draggable = "true" ondragstart = "drag(event)" placeholder="Write a post!"  ></textarea>
@@ -104,32 +108,34 @@ background-color: LightSkyBlue;
                 </div>
             </form>
          </div>
+         </div>
+
+         <div id = "Home_part14">
+         <div class = "float">
+            <div id = "wall" style="border:1px solid" ondrop = "drop(event)" ondragover = "allowDrop(event)" > </div>
+         </div>
+         </div>
+    </div>
 
 
+        <div id = "Home_part2">
 
          <div class= "float">
            <form method="post" id="media_image" onsubmit = "upload_media(); return false;">
            <input id="post_media" type="file" accept="image/*, video/*, audio/*" onchange = 'preview_media(event)'>
-           <input type = "submit" value = "Upload">
+           <input id = "upload_my_media" type = "submit" value = "Upload">
             </form>
         </div>
 
-        <div>
-          <video class = media id = "media" controls>
-            <source src = "static/mov_bbb.ogg" type="video/ogg">
-          </video>
-        </div>
 
-
-
-         <div class = "float">
-            <div id = "wall" style="border:1px solid" ondrop = "drop(event)" ondragover = "allowDrop(event)" > </div>
-         </div>
 
          <div class = "float">
             <div id = "media_wall" style="border:1px solid">
             </div>
          </div>
+
+       </div>
+      </div>
     </div>
 
 
@@ -173,12 +179,11 @@ background-color: LightSkyBlue;
 
          <div class= "float">
            <form method="post" id="media_image_browse" onsubmit = "upload_media_browse(); return false;">
-           <input id="post_media_browse" type="file" accept="image/*">
+           <input id="post_media_browse" type="file" accept="video/*, audio/*, image/*">
            <input type="submit" value= "Upload">
             </form>
         </div>
 
-        <img class = media_browse id = "media" src = "static/add.png" />
 
          <div class= "float">
             <div id="browse_wall" style="border:1px solid" ondrop = "drop_friend(event)" ondragover = "allowDrop(event)"> </div>

@@ -59,6 +59,16 @@ def check_already_login(email):
     else:
         return False
 
+def check_token(token):
+    cursor = g.bn.execute("select * email from user where token = ?", [token])
+    rows = cursor.fetchall()
+    cursor.close()
+    if rows:
+        return True
+    else:
+        return False
+
+
 
 def check_user(email, password, token):
     result=[]

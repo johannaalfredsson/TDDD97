@@ -27,7 +27,7 @@ function signin() //FUNKAR
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/signin", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onrestatichange = function() {
       if (this.readyState ==4 && this.status == 200) {
         var parsedJson = JSON.parse(xhttp.responseText)
         var message = parsedJson.message;
@@ -328,20 +328,18 @@ function showmymediaWall() //FUNKAR
 
             let row = document.createElement("DIV");
             console.log("row", row);
-            let img = document.createElement("IMG"); //VIDEO
-            console.log("img", img)
-
-            img.src = "static/" + data[i].media;
+            let img = document.createElement("VIDEO"); //VIDEO
+            img.style.width = "300px";
+            img.style.height ="250px";
+            console.log("img", img);
+            let source = document.createElement("SOURCE");
+            source.src = "static/" + data[i].media;
+            source.type = "video/ogg";
+            img.appendChild(source);
+            img.controls = true;
             row.appendChild(img);
             document.getElementById("media_wall").appendChild(row);
-            console.log("klar")
         }
-              //document.getElementById("media_wall").innerHTML =
-
-                //  "<video class = media controls>"
-                  //"<source src = static/mov_bbb.ogg type=video/ogg>"
-                  //"</video>"
-
         }
       };
    xhttp.send();
@@ -388,20 +386,25 @@ function showUsermediaWall() //FUNKAR
         var data = parsedJson.data;
         document.getElementById("media_browse_wall").innerHTML = "";
         console.log("data", data)
-        console.log("SUCCESSSSSS:", success)
 
         if (success) {
 
           for(var i= 0; i<data.length; i++){
 
-              let row = document.createElement("DIV");
-              console.log("row", row);
-              let img = document.createElement("IMG");
-              img.src = "static/" + data[i].content;
-              console.log("HERE", img.src)
-              row.appendChild(img);
-              document.getElementById("media_browse_wall").appendChild(row);
-              console.log("klar")
+            let row = document.createElement("DIV");
+            console.log("row", row);
+            let img = document.createElement("VIDEO");
+            img.style.width = "300px";
+            img.style.height ="250px";
+            console.log("img", img);
+            let source = document.createElement("SOURCE");
+            source.src = "static/" + data[i].content;
+            source.type = "video/ogg";
+            img.appendChild(source);
+            img.controls = true;
+            row.appendChild(img);
+            document.getElementById("media_browse_wall").appendChild(row);
+
           }
         }
       };
