@@ -27,18 +27,17 @@ function signin() //FUNKAR
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/signin", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onrestatichange = function() {
+    xhttp.onreadystatechange = function() {
       if (this.readyState ==4 && this.status == 200) {
         var parsedJson = JSON.parse(xhttp.responseText)
+        console.log(parsedJson)
         var message = parsedJson.message;
         var success = parsedJson.success;
         var data = parsedJson.token;
 
-
         if (success) {
             localStorage.setItem("token", data);
             check_token();
-            socket();
         }
         else {
             document.getElementById("SignInMessage").innerHTML = message;
@@ -224,7 +223,7 @@ function showProfile() //FUNKAR
          document.getElementById("user_city").innerHTML = data.city;
          document.getElementById("user_country").innerHTML = data.country;
          document.getElementById("user_email").innerHTML = data.email;
-         document.getElementById("pic").src = "static/" + data.picture}
+         document.getElementById("pic").src = "loadmedia/" + token + '/' + data.picture}
        }
        xhttp.send();
 
@@ -333,7 +332,7 @@ function showmymediaWall() //FUNKAR
             img.style.height ="250px";
             console.log("img", img);
             let source = document.createElement("SOURCE");
-            source.src = "static/" + data[i].media;
+            source.src = "loadmedia/" + token + '/' + data[i].media;
             source.type = "video/ogg";
             img.appendChild(source);
             img.controls = true;
@@ -398,7 +397,7 @@ function showUsermediaWall() //FUNKAR
             img.style.height ="250px";
             console.log("img", img);
             let source = document.createElement("SOURCE");
-            source.src = "static/" + data[i].content;
+            source.src = "loadmedia/" + token + '/' + data[i].content;
             source.type = "video/ogg";
             img.appendChild(source);
             img.controls = true;
@@ -435,7 +434,7 @@ function searchUser() //FUNKAR
             document.getElementById("friend_country").innerHTML = data.country;
             document.getElementById("friend_email").innerHTML = data.email;
             document.getElementById("message_browse").innerHTML = message;
-            document.getElementById("pic_browse").src = "static/" + data.picture;
+            document.getElementById("pic_browse").src = "loadmedia/" + token + '/' + data.picture;
             document.getElementById("browse_hide").style.display = "block";
             showUsersWall();
             showUsermediaWall();

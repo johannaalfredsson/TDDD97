@@ -27,15 +27,14 @@ def root():
 
 
 
-#@app.route('/loadmedia/<token>/<filename>', methods=['GET'])
-#def load_media(token, filename):
-#    console.log("here")
-#    result = database_helper.check_token(token)
-#    if result:
-#        app.send_from_directory("Images", filename)
-#        return jsonify({"success": True, "message": 'you are allowed to see the pic'})
-#    else:
-#        return jsonify({"success": False, "message": 'not allowed'})
+@app.route('/loadmedia/<token>/<filename>', methods=['GET'])
+def load_media(token, filename):
+    print "here"
+    result = database_helper.check_token(token)
+    if result:
+        return send_from_directory("loadmedia", filename)
+    else:
+        return jsonify({"success": False, "message": 'not allowed'})
 
 
 
@@ -49,8 +48,9 @@ def teardown_request(exception):
 
 
 
-@socket.route('/echo')
-def echo_socket(ws):
+@app.route('/echo')
+def echo_socket():
+    ws = request.environ['wsgi.websocket']
     g.db = sqlite3.connect(DATABASE)
 
     print "ws", ws
@@ -122,6 +122,7 @@ def sign_in():
 
     result = database_helper.check_user(username, password, token)
 
+    print "result; " + result
 
     if result != False:
         return jsonify({"success": True, "message": 'succesfully signed in', "token": result})
@@ -239,7 +240,7 @@ def post_message():
 def save_profilepic(token, email):
     picture = request.files['file']
     picturename = token + "___" + email + "____" + picture.filename
-    picture.save("static/" + picturename)
+    picture.save("loadmedia/" + picturename)
 
     result = database_helper.post_profilepic(email, picturename)
 
@@ -254,7 +255,7 @@ def save_media(token, email):
     media = request.files['file']
 
     medianame = token + "___" + email + "____" + media.filename
-    media.save("static/" + medianame)
+    media.save("loadmedia/" + medianame)
     print("media", media, "token", token, "email", email)
 
     result = database_helper.post_media(email, medianame)
@@ -271,7 +272,7 @@ def save_media_browse(token, email):
     media = request.files['file']
 
     medianame = token + "___" + email + "____" + media.filename
-    media.save("static/" + medianame)
+    media.save("loadmedia/" + medianame)
     print("media", media, "token", token, "email", email)
 
     result = database_helper.post_media_browse(token, email, medianame)
